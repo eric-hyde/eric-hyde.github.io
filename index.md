@@ -1,3 +1,3 @@
 ## Welcome Friends!
 
-![punchable face]({{ site.url })/assets/face.png)
+![punchable face]({{ site.url }})/assets/face.png)
