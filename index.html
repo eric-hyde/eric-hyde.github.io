@@ -47,9 +47,8 @@ Email: <input name="email" required="" size="60" type="email"/>
    while(loopStart) {
        analytics.track('Loop Event', {
                        blah: 'meh',
-                       integrations: {},
                        image_url: 'https://www.example.com/product/path.jpg'
-    });
+    }, {integrations: {'Actions Slack': {'test': 123}}});
     await new Promise(r => setTimeout(r, 2000))
    }
  }
