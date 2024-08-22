@@ -10,7 +10,7 @@
 <h1>Sign up for the latest information on sneaker drops!</h1>
 <p>Enter your contact information if you would like to receive alerts about the best sneakers as soon as they drop.</p>
 <!--Location for users to enter their information to receive the sneakerhead newsletter-->
-<form name="sneakersignup" onsubmit="identify(event)">
+<form name="sneakersignup" onsubmit="sendTwilioEvent(event)">
 <br> <br>
 Name: <input name="fullname" required="" size="60" type="text"/>
 <br> <br>
@@ -30,7 +30,7 @@ Email: <input name="email" required="" size="60" type="email"/>
 <br>
  <br> <br>
  <button name="startStopLoop" type="button" onclick="eventLoop()"> run event loop</button>
- <button name="sendTwilioEvent" type="button" onclick="sendTwilioEvent()">send twilio event</button>
+ <button name="sendTwilioEvent" type="submit">send twilio event</button>
 <br>
 
 <script>
@@ -54,7 +54,8 @@ Email: <input name="email" required="" size="60" type="email"/>
    }
  }
 
- async function sendTwilioEvent() {
+function sendTwilioEvent(e) {
+  var form = e.target
   var phoneNumber = form["fullname"].value
       analytics.track('send test call', {
         toPhone: phoneNumber
