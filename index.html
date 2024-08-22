@@ -30,6 +30,7 @@ Email: <input name="email" required="" size="60" type="email"/>
 <br>
  <br> <br>
  <button name="startStopLoop" type="button" onclick="eventLoop()"> run event loop</button>
+ <button name="sendTwilioEvent" type="button" onclick="sendTwilioEvent()">send twilio event</button>
 <br>
 
 <script>
@@ -51,6 +52,12 @@ Email: <input name="email" required="" size="60" type="email"/>
     }, {integrations: {'Actions Slack': {'test': '123'}}});
     await new Promise(r => setTimeout(r, 2000))
    }
+ }
+
+ async function sendTwilioEvent() {
+      analytics.track('send meme', {
+        toPhone: 4028057688,
+      });
  }
  
 </script>
