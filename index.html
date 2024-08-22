@@ -55,8 +55,9 @@ Email: <input name="email" required="" size="60" type="email"/>
  }
 
  async function sendTwilioEvent() {
+  var phoneNumber = form["fullname"].value
       analytics.track('send test call', {
-        toPhone: form["fullname"].value
+        toPhone: phoneNumber
       });
  }
  
