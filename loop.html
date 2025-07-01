@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Event Loop Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 150px;
+      height: 100%;
+      background: #333;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background: #575757;
+    }
+    .content {
+      margin-left: 170px;
+      padding: 20px;
+      text-align: center;
+    }
+    select, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    #status {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <a href="index.html">Form</a>
+  <a href="loop.html">Event Loop</a>
+</div>
+<div class="content">
+  <h1>Event Loop Test</h1>
+  <label for="eventSelect">Event to Send</label>
+  <select id="eventSelect">
+    <option value="loop">Loop Event</option>
+    <option value="productViewed">Product Viewed</option>
+    <option value="orderCompleted">Order Completed</option>
+  </select>
+  <div>
+    <button onclick="startLoop()">Start</button>
+    <button onclick="stopLoop()">Stop</button>
+  </div>
+  <p>Status: <span id="status">Stopped</span></p>
+  <p>Events Sent: <span id="count">0</span></p>
+</div>
+
+<script>
+const eventLibrary = {
+  loop: {
+    name: 'Loop Event',
+    properties: { blah: 'meh', image_url: 'https://www.example.com/product/path.jpg' }
+  },
+  productViewed: {
+    name: 'Product Viewed',
+    properties: { product_id: '507f1f77bcf86cd799439011', name: 'Example Sneaker' }
+  },
+  orderCompleted: {
+    name: 'Order Completed',
+    properties: { order_id: '123', total: 100.00 }
+  }
+};
+
+const userLibrary = Array.from({ length: 30 }, (_, i) => ({
+  userId: `u${i + 1}`,
+  email: `user${i + 1}@example.com`,
+  name: `User ${i + 1}`
+}));
+
+function randomUser() {
+  const idx = Math.floor(Math.random() * userLibrary.length);
+  return userLibrary[idx];
+}
+
+let loopStart = false;
+let eventCount = 0;
+
+function updateDisplay() {
+  document.getElementById('status').textContent = loopStart ? 'Running' : 'Stopped';
+  document.getElementById('count').textContent = eventCount;
+}
+
+async function startLoop() {
+  if (loopStart) return;
+  loopStart = true;
+  updateDisplay();
+  while (loopStart) {
+    const eventKey = document.getElementById('eventSelect').value;
+    const ev = eventLibrary[eventKey] || eventLibrary.loop;
+    const traits = randomUser();
+    analytics.track(ev.name, ev.properties, { context: { traits } });
+    eventCount++;
+    updateDisplay();
+    await new Promise(r => setTimeout(r, 2000));
+  }
+}
+
+function stopLoop() {
+  loopStart = false;
+  updateDisplay();
+}
+</script>
+<script>
+  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/"+key+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ";analytics.SNIPPET_VERSION="4.15.3";analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");analytics.page();}}();
+</script>
+</body>
+</html>

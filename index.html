@@ -1,5 +1,4 @@
 <!DOCTYPE html>
- 
 <html>
 <head>
   <title>Sneakerhead Signup</title>
@@ -7,7 +6,29 @@
     body {
       font-family: Arial, sans-serif;
       background: #f7f7f7;
-      margin: 40px;
+      margin: 0;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 150px;
+      height: 100%;
+      background: #333;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background: #575757;
+    }
+    .content {
+      margin-left: 170px;
+      padding: 20px;
       text-align: center;
     }
     form {
@@ -29,319 +50,72 @@
     input[type="submit"] {
       width: auto;
     }
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
-    }
     label {
       display: block;
       margin-bottom: 5px;
     }
-    .controls {
-      margin-top: 20px;
-    }
   </style>
 </head>
-
 <body>
-<h1>Sign up for the latest information on sneaker drops!</h1>
-<p>Enter your contact information if you would like to receive alerts about the best sneakers as soon as they drop.</p>
-<!--Location for users to enter their information to receive the sneakerhead newsletter-->
-<form name="sneakersignup" onsubmit="identify(event)">
-  <label>Name:<input name="fullname" required type="text" /></label>
-  <label>Email:<input name="email" required type="email" /></label>
-  <label for="shoeType">Preferred Shoe</label>
-  <select id="shoeType" name="shoeType">
-    <option value="Running">Running</option>
-    <option value="Cross Trainers">Cross Trainers</option>
-    <option value="Sports">Sports</option>
-  </select>
-  <input name="submit" type="submit" value="submit"/>
-</form>
-<div class="controls">
-  <label for="eventSelect">Event to Send</label>
-  <select id="eventSelect">
-    <option value="loop">Loop Event</option>
-    <option value="productViewed">Product Viewed</option>
-    <option value="orderCompleted">Order Completed</option>
-  </select>
-  <button name="startStopLoop" type="button" onclick="startStopEventLoop()">Start Stop Event Send loop</button>
-  <button name="startStopLoop" type="button" onclick="eventLoop()">run event loop</button>
+<div class="sidebar">
+  <a href="index.html">Form</a>
+  <a href="loop.html">Event Loop</a>
+</div>
+<div class="content">
+  <h1>Sign up for the latest information on sneaker drops!</h1>
+  <p>Enter your contact information if you would like to receive alerts about the best sneakers as soon as they drop.</p>
+  <form name="sneakersignup" onsubmit="identify(event)">
+    <label>Name*:<input name="fullname" required type="text" /></label>
+    <label>Email*:<input name="email" required type="email" /></label>
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      <option value="">Prefer not to say</option>
+      <option value="Female">Female</option>
+      <option value="Male">Male</option>
+      <option value="Other">Other</option>
+    </select>
+    <label>Address:<input name="address" type="text" /></label>
+    <label>Shoe Size:<input name="shoeSize" type="text" /></label>
+    <label for="shoeType">Preferred Shoe</label>
+    <select id="shoeType" name="shoeType">
+      <option value="Running">Running</option>
+      <option value="Cross Trainers">Cross Trainers</option>
+      <option value="Sports">Sports</option>
+    </select>
+    <input name="submit" type="submit" value="submit"/>
+  </form>
 </div>
 
 <script>
- const eventLibrary = {
-   loop: {
-     name: 'Loop Event',
-     properties: { blah: 'meh', image_url: 'https://www.example.com/product/path.jpg' }
-   },
-   productViewed: {
-     name: 'Product Viewed',
-     properties: { product_id: '507f1f77bcf86cd799439011', name: 'Example Sneaker' }
-   },
-   orderCompleted: {
-     name: 'Order Completed',
-     properties: { order_id: '123', total: 100.00 }
-   }
- };
-
- const userLibrary = Array.from({ length: 30 }, (_, i) => ({
-   userId: `u${i + 1}`,
-   email: `user${i + 1}@example.com`,
-   name: `User ${i + 1}`
- }));
-
- function randomUser() {
-   const idx = Math.floor(Math.random() * userLibrary.length);
-   return userLibrary[idx];
- }
-
- let loopStart = false
- 
- function startStopEventLoop() {
-    if(loopStart == false) {
-      loopStart = true;
-    } else {
-      loopStart = false;
-    }
- }
-
- async function eventLoop() {
-   while (loopStart) {
-    const eventKey = document.getElementById('eventSelect').value;
-    const ev = eventLibrary[eventKey] || eventLibrary.loop;
-    const traits = randomUser();
-    analytics.track(ev.name, ev.properties, { context: { traits } });
-     await new Promise(r => setTimeout(r, 2000));
-   }
- }
-
 function sendTwilioEvent(e) {
-  var form = e.target
-  var phoneNumber = form["fullname"].value
-      analytics.track('send test call', {
-        toPhone: phoneNumber
-      });
- }
- 
+  var form = e.target;
+  var phoneNumber = form["fullname"].value;
+  analytics.track('send test call', {
+    toPhone: phoneNumber
+  });
+}
 </script>
- 
 <script>
-  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ";;analytics.SNIPPET_VERSION="4.15.3";
-  analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");
-  analytics.page();
-  }}();
+  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/"+key+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ";analytics.SNIPPET_VERSION="4.15.3";analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");analytics.page();}}();
 </script>
-
 <script type="text/javascript">
  function identify(e){
- 
-
-
    e.preventDefault();
    var form = e.target;
    var email = form["email"].value;
    var fullname = form["fullname"].value;
    var shoeType = form["shoeType"].value;
-   var user = {
-     email: email,
-     name: fullname
-   };
-// Identify call
-    analytics.identify('12345', {
+   analytics.identify('12345', {
       email: email,
       name: fullname,
       shoeType: shoeType
     });
-    var phoneNumber = form["fullname"].value;
-      analytics.track('send test call', {
-        toPhone: phoneNumber
-      });
-
- //  Sign-up Track call
-    analytics.track('user signed up', user, function() {
-      window.location.href = "";
-    });
-// Ecommerce Events
-  //  analytics.track('Products Searched', {
-  //   query: 'kith air force 1'
-  //  });
- 
-   analytics.track('Product List Viewed', {
-     list_id: 'hot_sneakers_2021',
-     category: 'Trendy',
-     products: [ {
-       product_id: '507f1f77bcf86cd799439011',
-       sku: '45790-32',
-       name: 'Air Jordan 4 - White / Military Blue - Fire Red',
-       price: 500.00,
-       position: 1,
-       category: 'Jordan',
-       url: 'https://www.example.com/product/path',
-       image_url: 'https://www.example.com/product/path.jpg'
-     }, {
-       product_id: '505bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785eb6b509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd746785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785eb7b509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509f8183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb8509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785eb8b509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '5058bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '5805bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509fc183733',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   }, {
-       product_id: '505bd76785ebb509fc1837383',
-       sku: '46493-32',
-       name: 'Kith x Nike Air Force 1 “NYC”',
-       price: 1000.00,
-       position: 2,
-       category: 'Air Force 1'
-   } ] });
- 
-  //  analytics.track('Product Viewed', {
-  //    product_id: '507f1f77bcf86cd799439011',
-  //    sku: 'G-32',
-  //    category: 'Jordan',
-  //    name: 'Air Jordan 4 - White / Military Blue - Fire Red',
-  //    brand: 'Nike',
-  //    variant: 'November 2019',
-  //    price: 500.00,
-  //    quantity: 1,
-  //    coupon: 'First_Purchase',
-  //    currency: 'usd',
-  //    position: 2,
-  //    value: 500,
-  //    last_name: 'Bowerman',
-  //    url: 'https://www.example.com/product/path',
-  //    image_url: 'https://www.example.com/product/path.jpg'
-  //  });
- 
-  //  analytics.track('Product Added', {
-  //    cart_id: 'skdjsidjsdkdj29j',
-  //    product_id: '507f1f77bcf86cd799439011',
-  //    sku: 'G-32',
-  //    category: 'Jordan',
-  //    name: 'Air Jordan 4 - White / Military Blue - Fire Red',
-  //    brand: 'Nike',
-  //    variant: 'November 2019',
-  //    price: 500.00,
-  //    quantity: 1,
-  //    coupon: 'First_Purchase',
-  //    position: 2,
-  //    url: 'https://www.example.com/product/path',
-  //    image_url: 'https://www.example.com/product/path.jpg'
-  //  });
- 
-  //  analytics.track('Order Completed', {
-  //    checkout_id: 'fksdjfsdjfisjf9sdfjsd9f',
-  //    order_id: '50314b8e9bcf000000000000',
-  //    affiliation: 'Google Store',
-  //    total: 555.00,
-  //    subtotal: 500.00,
-  //    revenue: 525.00,
-  //    shipping: 35.00,
-  //    tax: 20.00,
-  //    discount: 30.00,
-  //    coupon: 'First_Purchase',
-  //    currency: 'USD',
-  //    products: [
-  //      {
-  //        product_id: '507f1f77bcf86cd799439011',
-  //        sku: 'G-32',
-  //        name: 'Air Jordan 4 - White / Military Blue - Fire Red',
-  //        price: 500.00,
-  //        quantity: 1,
-  //        category: 'Jordan',
-  //        url: 'https://www.example.com/product/path',
-  //        image_url: 'https:///www.example.com/product/path.jpg'
-  //      }
-  //    ]
-  //  });
+   var phoneNumber = form["fullname"].value;
+   analytics.track('send test call', {
+      toPhone: phoneNumber
+   });
+   analytics.track('user signed up', { email: email, name: fullname });
  }
- 
 </script>
- 
 </body>
 </html>
