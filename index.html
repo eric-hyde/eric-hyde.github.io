@@ -66,11 +66,6 @@
     <option value="productViewed">Product Viewed</option>
     <option value="orderCompleted">Order Completed</option>
   </select>
-  <label for="userSelect">User</label>
-  <select id="userSelect">
-    <option value="alice">Alice</option>
-    <option value="bob">Bob</option>
-  </select>
   <button name="startStopLoop" type="button" onclick="startStopEventLoop()">Start Stop Event Send loop</button>
   <button name="startStopLoop" type="button" onclick="eventLoop()">run event loop</button>
 </div>
@@ -91,10 +86,16 @@
    }
  };
 
- const userLibrary = {
-   alice: { userId: 'u1', email: 'alice@example.com', name: 'Alice' },
-   bob:   { userId: 'u2', email: 'bob@example.com',   name: 'Bob' }
- };
+ const userLibrary = Array.from({ length: 30 }, (_, i) => ({
+   userId: `u${i + 1}`,
+   email: `user${i + 1}@example.com`,
+   name: `User ${i + 1}`
+ }));
+
+ function randomUser() {
+   const idx = Math.floor(Math.random() * userLibrary.length);
+   return userLibrary[idx];
+ }
 
  let loopStart = false
  
@@ -108,11 +109,10 @@
 
  async function eventLoop() {
    while (loopStart) {
-     const eventKey = document.getElementById('eventSelect').value;
-     const userKey = document.getElementById('userSelect').value;
-     const ev = eventLibrary[eventKey] || eventLibrary.loop;
-     const traits = userLibrary[userKey] || {};
-     analytics.track(ev.name, ev.properties, { context: { traits } });
+    const eventKey = document.getElementById('eventSelect').value;
+    const ev = eventLibrary[eventKey] || eventLibrary.loop;
+    const traits = randomUser();
+    analytics.track(ev.name, ev.properties, { context: { traits } });
      await new Promise(r => setTimeout(r, 2000));
    }
  }
