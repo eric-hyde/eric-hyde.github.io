@@ -2,37 +2,100 @@
  
 <html>
 <head>
-<title>Sneakerhead Signup<span id="selection-marker-1" class="redactor-selection-marker"></span></title>
+  <title>Sneakerhead Signup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 40px;
+      text-align: center;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      width: auto;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+  </style>
 </head>
- 
-<body>
+
 <body>
 <h1>Sign up for the latest information on sneaker drops!</h1>
 <p>Enter your contact information if you would like to receive alerts about the best sneakers as soon as they drop.</p>
 <!--Location for users to enter their information to receive the sneakerhead newsletter-->
 <form name="sneakersignup" onsubmit="identify(event)">
-<br> <br>
-Name: <input name="fullname" required="" size="60" type="text"/>
-<br> <br>
-Email: <input name="email" required="" size="60" type="email"/>
-<br> <br>
-<label for="shoeType">Preferred Shoe</label>
- <select id="shoeType" name="shoeType">
-   <option value="Running">Running</option>
-   <option value="Cross Trainers">Cross Trainers</option>
-   <option value="Sports">Sports</option>
- </select>
-<br> <br>
- <input name="submit" type="submit" value="submit"/> </form>
-<br>
-<br> <br>
- <button name="startStopLoop" type="button" onclick="startStopEventLoop()"> Start Stop Event Send loop</button>
-<br>
- <br> <br>
- <button name="startStopLoop" type="button" onclick="eventLoop()"> run event loop</button>
-<br>
+  <label>Name:<input name="fullname" required type="text" /></label>
+  <label>Email:<input name="email" required type="email" /></label>
+  <label for="shoeType">Preferred Shoe</label>
+  <select id="shoeType" name="shoeType">
+    <option value="Running">Running</option>
+    <option value="Cross Trainers">Cross Trainers</option>
+    <option value="Sports">Sports</option>
+  </select>
+  <input name="submit" type="submit" value="submit"/>
+</form>
+<div class="controls">
+  <label for="eventSelect">Event to Send</label>
+  <select id="eventSelect">
+    <option value="loop">Loop Event</option>
+    <option value="productViewed">Product Viewed</option>
+    <option value="orderCompleted">Order Completed</option>
+  </select>
+  <label for="userSelect">User</label>
+  <select id="userSelect">
+    <option value="alice">Alice</option>
+    <option value="bob">Bob</option>
+  </select>
+  <button name="startStopLoop" type="button" onclick="startStopEventLoop()">Start Stop Event Send loop</button>
+  <button name="startStopLoop" type="button" onclick="eventLoop()">run event loop</button>
+</div>
 
 <script>
+ const eventLibrary = {
+   loop: {
+     name: 'Loop Event',
+     properties: { blah: 'meh', image_url: 'https://www.example.com/product/path.jpg' }
+   },
+   productViewed: {
+     name: 'Product Viewed',
+     properties: { product_id: '507f1f77bcf86cd799439011', name: 'Example Sneaker' }
+   },
+   orderCompleted: {
+     name: 'Order Completed',
+     properties: { order_id: '123', total: 100.00 }
+   }
+ };
+
+ const userLibrary = {
+   alice: { userId: 'u1', email: 'alice@example.com', name: 'Alice' },
+   bob:   { userId: 'u2', email: 'bob@example.com',   name: 'Bob' }
+ };
+
  let loopStart = false
  
  function startStopEventLoop() {
@@ -44,12 +107,13 @@ Email: <input name="email" required="" size="60" type="email"/>
  }
 
  async function eventLoop() {
-   while(loopStart) {
-       analytics.track('Loop Event', {
-                       blah: 'meh',
-                       image_url: 'https://www.example.com/product/path.jpg'
-    }, {integrations: {'Actions Slack': {'test': '123'}}});
-    await new Promise(r => setTimeout(r, 2000))
+   while (loopStart) {
+     const eventKey = document.getElementById('eventSelect').value;
+     const userKey = document.getElementById('userSelect').value;
+     const ev = eventLibrary[eventKey] || eventLibrary.loop;
+     const traits = userLibrary[userKey] || {};
+     analytics.track(ev.name, ev.properties, { context: { traits } });
+     await new Promise(r => setTimeout(r, 2000));
    }
  }
 
@@ -68,7 +132,6 @@ function sendTwilioEvent(e) {
   analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");
   analytics.page();
   }}();
- eventLoop();
 </script>
 
 <script type="text/javascript">
