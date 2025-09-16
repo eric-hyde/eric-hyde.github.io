@@ -1,121 +1,306 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Sneakerhead Signup</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      margin: 0;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 150px;
-      height: 100%;
-      background: #333;
-      padding-top: 20px;
-    }
-    .sidebar a {
-      display: block;
-      color: #fff;
-      padding: 10px;
-      text-decoration: none;
-    }
-    .sidebar a:hover {
-      background: #575757;
-    }
-    .content {
-      margin-left: 170px;
-      padding: 20px;
-      text-align: center;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      max-width: 400px;
-      margin: 0 auto;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input[type="text"],
-    input[type="email"],
-    select {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    input[type="submit"] {
-      width: auto;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-    }
-  </style>
-</head>
-<body>
-<div class="sidebar">
-  <a href="index.html">Form</a>
-  <a href="loop.html">Event Loop</a>
-</div>
-<div class="content">
-  <h1>Sign up for the latest information on sneaker drops!</h1>
-  <p>Enter your contact information if you would like to receive alerts about the best sneakers as soon as they drop.</p>
-  <form name="sneakersignup" onsubmit="identify(event)">
-    <label>Name*:<input name="fullname" required type="text" /></label>
-    <label>Email*:<input name="email" required type="email" /></label>
-    <label for="gender">Gender</label>
-    <select id="gender" name="gender">
-      <option value="">Prefer not to say</option>
-      <option value="Female">Female</option>
-      <option value="Male">Male</option>
-      <option value="Other">Other</option>
-    </select>
-    <label>Address:<input name="address" type="text" /></label>
-    <label>Shoe Size:<input name="shoeSize" type="text" /></label>
-    <label for="shoeType">Preferred Shoe</label>
-    <select id="shoeType" name="shoeType">
-      <option value="Running">Running</option>
-      <option value="Cross Trainers">Cross Trainers</option>
-      <option value="Sports">Sports</option>
-    </select>
-    <input name="submit" type="submit" value="submit"/>
-  </form>
-</div>
+  <head>
+    <title>Sneakerhead Signup</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        margin: 0;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 150px;
+        height: 100%;
+        background: #333;
+        padding-top: 20px;
+      }
+      .sidebar a {
+        display: block;
+        color: #fff;
+        padding: 10px;
+        text-decoration: none;
+      }
+      .sidebar a:hover {
+        background: #575757;
+      }
+      .content {
+        margin-left: 170px;
+        padding: 20px;
+        text-align: center;
+      }
+      form {
+        background: #fff;
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"],
+      input[type="email"],
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+      input[type="submit"] {
+        width: auto;
+      }
+      button {
+        width: auto;
+        margin-left: 10px;
+        padding: 8px 16px;
+        background-color: #007cba;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #005a87;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <a href="index.html">Form</a>
+      <a href="loop.html">Event Loop</a>
+    </div>
+    <div class="content">
+      <h1>Sign up for the latest information on sneaker drops!</h1>
+      <p>
+        Enter your contact information if you would like to receive alerts about
+        the best sneakers as soon as they drop.
+      </p>
+      <form name="sneakersignup" onsubmit="identify(event)">
+        <label>Name*:<input name="fullname" required type="text" /></label>
+        <label>Email*:<input name="email" required type="email" /></label>
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+          <option value="">Prefer not to say</option>
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Other">Other</option>
+        </select>
+        <label>Address:<input name="address" type="text" /></label>
+        <label>Shoe Size:<input name="shoeSize" type="text" /></label>
+        <label for="shoeType">Preferred Shoe</label>
+        <select id="shoeType" name="shoeType">
+          <option value="Running">Running</option>
+          <option value="Cross Trainers">Cross Trainers</option>
+          <option value="Sports">Sports</option>
+        </select>
+        <input name="submit" type="submit" value="submit" />
+        <button type="button" onclick="fillFormWithRandomData()">
+          Fill Random & Submit
+        </button>
+      </form>
+    </div>
 
-<script>
-function sendTwilioEvent(e) {
-  var form = e.target;
-  var phoneNumber = form["fullname"].value;
-  analytics.track('send test call', {
-    toPhone: phoneNumber
-  });
-}
-</script>
-<script>
-  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/"+key+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ";analytics.SNIPPET_VERSION="4.15.3";analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");analytics.page();}}();
-</script>
-<script type="text/javascript">
- function identify(e){
-   e.preventDefault();
-   var form = e.target;
-   var email = form["email"].value;
-   var fullname = form["fullname"].value;
-   var shoeType = form["shoeType"].value;
-   analytics.identify('12345', {
-      email: email,
-      name: fullname,
-      shoeType: shoeType
-    });
-   var phoneNumber = form["fullname"].value;
-   analytics.track('send test call', {
-      toPhone: phoneNumber
-   });
-   analytics.track('user signed up', { email: email, name: fullname });
- }
-</script>
-</body>
+    <script>
+      function sendTwilioEvent(e) {
+        var form = e.target;
+        var phoneNumber = form["fullname"].value;
+        analytics.track("send test call", {
+          toPhone: phoneNumber,
+        });
+      }
+    </script>
+    <script>
+      !(function () {
+        var analytics = (window.analytics = window.analytics || []);
+        if (!analytics.initialize)
+          if (analytics.invoked)
+            window.console &&
+              console.error &&
+              console.error("Segment snippet included twice.");
+          else {
+            analytics.invoked = !0;
+            analytics.methods = [
+              "trackSubmit",
+              "trackClick",
+              "trackLink",
+              "trackForm",
+              "pageview",
+              "identify",
+              "reset",
+              "group",
+              "track",
+              "ready",
+              "alias",
+              "debug",
+              "page",
+              "once",
+              "off",
+              "on",
+              "addSourceMiddleware",
+              "addIntegrationMiddleware",
+              "setAnonymousId",
+              "addDestinationMiddleware",
+            ];
+            analytics.factory = function (e) {
+              return function () {
+                var t = Array.prototype.slice.call(arguments);
+                t.unshift(e);
+                analytics.push(t);
+                return analytics;
+              };
+            };
+            for (var e = 0; e < analytics.methods.length; e++) {
+              var key = analytics.methods[e];
+              analytics[key] = analytics.factory(key);
+            }
+            analytics.load = function (key, e) {
+              var t = document.createElement("script");
+              t.type = "text/javascript";
+              t.async = !0;
+              t.src =
+                "https://cdn.segment.com/analytics.js/v1/" +
+                key +
+                "/analytics.min.js";
+              var n = document.getElementsByTagName("script")[0];
+              n.parentNode.insertBefore(t, n);
+              analytics._loadOptions = e;
+            };
+            analytics._writeKey = "QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ";
+            analytics.SNIPPET_VERSION = "4.15.3";
+            analytics.load("QCR58Bl1ejtTF6FeYmXOeoCYfCqBEFKZ");
+            analytics.page();
+          }
+      })();
+    </script>
+    <script type="text/javascript">
+      function generateGUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+          /[xy]/g,
+          function (c) {
+            var r = (Math.random() * 16) | 0,
+              v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          }
+        );
+      }
+
+      function getRandomElement(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function generateRandomEmail() {
+        var domains = [
+          "gmail.com",
+          "yahoo.com",
+          "hotmail.com",
+          "outlook.com",
+          "example.com",
+        ];
+        var username = Math.random().toString(36).substring(2, 10);
+        return username + "@" + getRandomElement(domains);
+      }
+
+      function fillFormWithRandomData() {
+        var form = document.forms["sneakersignup"];
+
+        // Random names
+        var firstNames = [
+          "Alex",
+          "Jordan",
+          "Casey",
+          "Taylor",
+          "Morgan",
+          "Riley",
+          "Avery",
+          "Quinn",
+          "Sage",
+          "Blake",
+        ];
+        var lastNames = [
+          "Smith",
+          "Johnson",
+          "Williams",
+          "Brown",
+          "Jones",
+          "Garcia",
+          "Miller",
+          "Davis",
+          "Rodriguez",
+          "Martinez",
+        ];
+
+        // Fill form fields
+        form["fullname"].value =
+          getRandomElement(firstNames) + " " + getRandomElement(lastNames);
+        form["email"].value = generateRandomEmail();
+        form["gender"].value = getRandomElement([
+          "",
+          "Female",
+          "Male",
+          "Other",
+        ]);
+
+        // Random addresses
+        var addresses = [
+          "123 Main St, Anytown USA",
+          "456 Oak Ave, Springfield",
+          "789 Pine Rd, Somewhere City",
+          "321 Elm St, Downtown",
+          "654 Maple Dr, Suburbia",
+        ];
+        form["address"].value = getRandomElement(addresses);
+
+        // Random shoe sizes
+        var shoeSizes = [
+          "7",
+          "7.5",
+          "8",
+          "8.5",
+          "9",
+          "9.5",
+          "10",
+          "10.5",
+          "11",
+          "11.5",
+          "12",
+        ];
+        form["shoeSize"].value = getRandomElement(shoeSizes);
+
+        form["shoeType"].value = getRandomElement([
+          "Running",
+          "Cross Trainers",
+          "Sports",
+        ]);
+
+        // Submit the form after a brief delay to show the filled data
+        setTimeout(function () {
+          form.submit();
+        }, 500);
+      }
+
+      function identify(e) {
+        e.preventDefault();
+        var form = e.target;
+        var email = form["email"].value;
+        var fullname = form["fullname"].value;
+        var shoeType = form["shoeType"].value;
+        var randomGUID = generateGUID();
+        analytics.identify(randomGUID, {
+          email: email,
+          name: fullname,
+          shoeType: shoeType,
+        });
+        var phoneNumber = form["fullname"].value;
+        analytics.track("send test call", {
+          toPhone: phoneNumber,
+        });
+        analytics.track("user signed up", { email: email, name: fullname });
+      }
+    </script>
+  </body>
 </html>
